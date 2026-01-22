@@ -173,6 +173,23 @@ Este proyecto me permitió aprender:
 3. **Seguridad**: Configuración de `nodeIntegration` y `contextIsolation`
 4. **Tailwind CSS**: Diseño responsive y moderno
 5. **Hot Reload**: Configuración de Nodemon para desarrollo ágil
+6. **Refactorización de código**: Separación de responsabilidades y mejores prácticas
+
+## 📜 Historial de Cambios
+
+### Versión Actual: **v0.2.0** (2026-01-22)
+
+#### Últimos Cambios
+- ♻️ **Refactorización completa**: Separación de lógica JavaScript en archivo externo
+- 📚 **Documentación mejorada**: README completo y plan de mejoras detallado
+- ⚡ **Optimizaciones**: Funciones refactorizadas con mejores prácticas
+- 🎯 **Mejoras de UX**: Tiempo relativo dinámico y preview de mensajes inteligente
+
+Para ver el historial completo de cambios, consulta el archivo [`CHANGELOG.md`](./CHANGELOG.md).
+
+### Versiones Anteriores
+- **v0.1.0** (2026-01-22): Versión inicial con funcionalidad básica de chat
+- **v0.0.0** (2026-01-22): Inicio del proyecto
 
 ## 🔮 Roadmap
 
