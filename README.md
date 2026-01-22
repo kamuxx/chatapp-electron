@@ -50,6 +50,8 @@ electronjs/
 ├── src/
 │   ├── app.js                    # Proceso principal (Main Process)
 │   ├── chats.js                  # Datos mock de contactos y mensajes
+│   ├── renderer/
+│   │   └── chat-renderer.js      # Lógica del renderer process
 │   ├── pages/
 │   │   ├── chat.html             # Interfaz principal del chat
 │   │   ├── index.html            # Página de inicio
