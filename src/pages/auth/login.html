@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/output.css">
+    <title>ChatApp</title>
+</head>
+
+<body class="bg-gray-950 text-gray-200 min-h-screen flex flex-col justify-between">
+    <header class="flex flex-col justify-center items-center py-10">
+        <h1 class="text-3xl font-bold tracking-wider text-blue-500">ChatApp</h1>
+        <svg class="w-16 h-16 text-blue-500 mt-4 drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+            </path>
+        </svg>
+        <p class="text-gray-400 mt-2 text-sm">Conéctate al instante</p>
+    </header>
+    <main class=" flex justify-center w-full">
+        <div id="cardLogin"
+            class=" max-w-sm bg-gray-900 border border-gray-800 rounded-xl shadow-2xl p-8 backdrop-blur-sm">
+
+            <form id="formLogin" class="flex flex-col items-center">
+                <div class="flex flex-col">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" name="username"
+                        class="border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="flex flex-col mt-4">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password"
+                        class="border border-gray-600 rounded px-4 py-2 focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="flex flex-col justify-center mt-4">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4">Iniciar
+                        Sesión</button>
+                    <p class="pt-4">No tienes una cuenta? <a href="#"
+                            class="text-blue-500 hover:text-blue-600 ">Registrarse</a></p>
+                </div>
+            </form>
+        </div>
+    </main>
+    <section class="mt-4 flex justify-center">
+        <footer class="h-16 flex items-center">
+            <p>Version: 1.0.0</p>
+        </footer>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@import "./typography.css";
+
+
+.burble-received {
+    background: linear-gradient(135deg, #60dd98 0%, #13a851 100%);
+    min-width: 15%;
+    max-width: 80%;
+}
+
+.burble-sent {
+    background: linear-gradient(135deg, #707070 0%, #4e4f52 100%) !important;
+    align-self: flex-end;
+    min-width: 15%;
+    max-width: 80%;
+}
+
+.contact-selected {
+    background-color: #1e2939 !important;
+}
+
+@media (min-width: 992px) {
+    .burble {
+        max-width: 65%;
+    }
+}
