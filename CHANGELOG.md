@@ -14,6 +14,23 @@ Ver el archivo [`mejoras.md`](./mejoras.md) para el roadmap completo de mejoras 
 
 ---
 
+## [0.3.0] - 2026-02-20
+
+### ✨ Características (Features)
+- **Empaquetado y Distribución**: Integración con `electron-forge` (`@electron-forge/cli`, makers para squirrel, deb, rpm, zip).
+- **Entorno Limpio de Compilación**: Configuración con Docker (`Dockerfile.builder`, `docker-compose.builder.yml` y `.dockerignore`) para empaquetado seguro y multi-plataforma de Electron.
+
+### 📚 Documentación (Docs)
+- **Guías de Compilación**: Agregados manuales detallados (`GUIA_COMPILACION_MULTIPLATAFORMA.md` y `GUIA_COMPILACION_WINDOWS.md`) para facilitar los builds de la aplicación.
+- **Arquitectura y Contexto**: Inclusión de `gemini.md` describiendo la arquitectura a alto nivel y principios de la aplicación.
+- Actualización general en los manuales de integración de React con Electron (`GUIA-REACT-ELECTRON.md` y `GUIA-CHAT-REACT-ELECTRON.md`).
+
+### 🔧 Configuración (Chore)
+- **Scripts Npm**: Añadidos scripts `start`, `package` y `make` en el `package.json` para simplificar la ejecución de Forge.
+- Configuración de `forge.config.js` adaptada al entorno Windows y con soporte nativo (utilizando `@electron-forge/plugin-auto-unpack-natives` y mitigación de fuses).
+
+---
+
 ## [0.2.0] - 2026-01-22
 
 ### ♻️ Refactorización

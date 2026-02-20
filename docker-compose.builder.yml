@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  electron-linux-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile.builder
+    volumes:
+      # Sincronizamos solo la carpeta 'out' para recuperar los instaladores de Linux en nuestro Windows
+      - ./out:/usr/src/app/out
+    container_name: chat-app-linux-builder
