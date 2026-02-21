@@ -14,6 +14,15 @@ Ver el archivo [`mejoras.md`](./mejoras.md) para el roadmap completo de mejoras 
 
 ---
 
+## [1.1.0] - 2026-02-20
+
+### ✨ Características (Features)
+- **Auto-Updater Activo**: Configuración arquitectónica e integración de `electron-updater`.
+- **Comunicación IPC Segura**: Nuevos canales (`update-available`, `update-ready`, `start-update-download`, `install-update`) para coordinar las descargas entre la UI y el Sistema Operativo sin romper la seguridad del *Main Process*.
+- **Configuración de Publicación**: Adición del bloque `build.publish` en `package.json` apuntando a GitHub Releases para habilitar las consultas REST del actualizador hacia el repositorio origen.
+
+---
+
 ## [0.3.0] - 2026-02-20
 
 ### ✨ Características (Features)

@@ -1,5 +1,6 @@
 const { BrowserWindow, Menu, app, ipcMain } = require('electron');
 const {contacts, chats} = require('./chats');
+const { autoUpdater, AppUpdater } = require('electron-updater');
 
 const path = require('path');
 const srcPath = path.join(__dirname);
@@ -63,7 +64,40 @@ function createWindow() {
         const contact = chats.find(contact => contact.nick === arg);        
         const {messages} = contact;        
         mainWindow.webContents.send('user-messages',messages);
+    });
+
+    ipcMain.on('start-update-download',()=> {
+        // Iniciar descarga
+        autoUpdater.downloadUpdate();
+    });
+
+    ipcMain.on('install-update',()=> {
+        // Instalar update
+        autoUpdater.quitAndInstall();
+    });
+
+    return mainWindow;
+}
+
+function autoUpdaterApp(mainWindow){
+    autoUpdater.autoDownload = false;
+    autoUpdater.autoInstallOnAppQuit = false;
+    autoUpdater.checkForUpdates();
+
+    autoUpdater.on('update-available',() => {
+        console.log('Update available');
+        mainWindow.webContents.send('update-available');
+    })
+
+
+    autoUpdater.on('update-downloaded',() => {
+        console.log('Update downloaded');
+        mainWindow.webContents.send('update-ready');
+    })
+
+    autoUpdater.on('error',(error) => {
+        console.log('Error updating',error);
     })
 }
 
-module.exports = { createWindow };
+module.exports = { createWindow, autoUpdaterApp };

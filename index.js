@@ -1,5 +1,10 @@
-const { app } = require('electron');
-const { createWindow } = require('./src/app');
+const electron = require('electron');
+console.log('ELECTRON_RUN_AS_NODE:', process.env.ELECTRON_RUN_AS_NODE);
+const { app } = electron;
 
+const { createWindow, autoUpdaterApp } = require('./src/app');
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+    const mainWindow = createWindow();
+    autoUpdaterApp(mainWindow);
+});
