@@ -312,6 +312,18 @@ ipcRenderer.on('user-messages', (event, data) => {
     renderMessages(data);
 });
 
+ipcRenderer.on('update-available', (event, data) => {
+    console.log('Update available', data);
+});
+
+ipcRenderer.on('update-downloading', (event, data) => {
+    console.log('Update downloading', data);
+});
+
+ipcRenderer.on('update-ready', (event, data) => {
+    console.log('Update ready', data);
+});
+
 // ============================================================================
 // EVENT LISTENERS
 // ============================================================================

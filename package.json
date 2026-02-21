@@ -41,13 +41,25 @@
     "electron-updater": "^6.8.3",
     "tailwindcss": "^4.1.18"
   },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "Kamuxx",
+      "repo": "chatapp-electron"
+    }
+  ],
   "build": {
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "Kamuxx",
-        "repo": "chatapp-electron"
-      }
-    ]
+    "appId": "com.lrodsystem.autoupdater",
+    "productName": "ChatApp",
+    "win": {
+      "target": "nsis"
+    },
+    "directories": {
+      "output": "release"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kamuxx/chatapp-electron.git"
   }
 }

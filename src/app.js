@@ -66,13 +66,21 @@ function createWindow() {
         mainWindow.webContents.send('user-messages',messages);
     });
 
+    ipcMain.on('check-for-updates',()=> {
+        mainWindow.webContents.send('update-available',{message:"Update available"});
+    })
+
     ipcMain.on('start-update-download',()=> {
         // Iniciar descarga
         autoUpdater.downloadUpdate();
+        mainWindow.webContents.send('update-downloading',{message:"Update downloading"});
     });
 
     ipcMain.on('install-update',()=> {
         // Instalar update
+
+        mainWindow.webContents.send('update-ready',{message:"Update ready"});
+
         autoUpdater.quitAndInstall();
     });
 

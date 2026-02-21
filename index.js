@@ -7,4 +7,10 @@ const { createWindow, autoUpdaterApp } = require('./src/app');
 app.whenReady().then(() => {
     const mainWindow = createWindow();
     autoUpdaterApp(mainWindow);
+
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
+        }
+    });
 });
