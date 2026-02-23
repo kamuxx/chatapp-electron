@@ -14,6 +14,20 @@ Ver el archivo [`mejoras.md`](./mejoras.md) para el roadmap completo de mejoras 
 
 ---
 
+## [1.2.0] - 2026-02-23
+
+### ✨ Características (Features)
+- **Notificaciones Visuales de Actualización**: Implementación de un Toast interactivo en base a TailwindCSS inyectado en `chat.html` para dar visibilidad al usuario del proceso de descarga e instalación.
+- **Controlador Dinámico de Estado**: Nueva función `showUpdaterUI()` en `chat-renderer.js` que se conecta a los eventos del proceso principal y actualiza la DOM dinámicamente incluyendo barras de progreso con RegExp.
+- **Logs Nativos**: Integración de la librería `electron-log` en el backend para trazar mejor el proceso del AutoUpdater.
+
+### 🔧 Configuración (Chore)
+- **Migración a Bun**: Reemplazo de `package-lock.json` por `bun.lock` para optimizar los tiempos y estabilidad en el manejo de dependencias.
+- **Notarización y Empaquetado Windows**: Modificación profunda del target del builder a NSIS `win: { target: "nsis" }` omitiendo `oneClick: false` para el Setup manual.
+- **Actualización de `.gitignore`**: Agregado `/release/` para evitar trackear los compilados finales.
+
+---
+
 ## [1.1.0] - 2026-02-20
 
 ### ✨ Características (Features)

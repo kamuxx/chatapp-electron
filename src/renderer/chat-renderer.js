@@ -312,17 +312,117 @@ ipcRenderer.on('user-messages', (event, data) => {
     renderMessages(data);
 });
 
+// ============================================================================
+// LOGICA DE INTERFAZ DEL AUTO-UPDATER
+// ============================================================================
+
+const showUpdaterUI = (message, state) => {
+    const updaterNotification = document.getElementById('updater-notification');
+    const updaterMessage = document.getElementById('updater-message');
+    const updaterProgressContainer = document.getElementById('updater-progress');
+    const btnUpdateAction = document.getElementById('btn-update-action');
+    const btnUpdateDismiss = document.getElementById('btn-update-dismiss');
+
+    if (!updaterNotification) return;
+
+    updaterNotification.classList.remove('hidden');
+    updaterNotification.classList.add('flex');
+    updaterMessage.innerText = message;
+
+    // Resetear visibilidad por defecto
+    btnUpdateAction.classList.add('hidden');
+    btnUpdateDismiss.classList.add('hidden');
+    updaterProgressContainer.classList.add('hidden');
+
+    // Clonar nodos para limpiar Listeners previos y evitar multiplicidad
+    const newBtnUpdateAction = btnUpdateAction.cloneNode(true);
+    btnUpdateAction.parentNode.replaceChild(newBtnUpdateAction, btnUpdateAction);
+
+    const newBtnUpdateDismiss = btnUpdateDismiss.cloneNode(true);
+    btnUpdateDismiss.parentNode.replaceChild(newBtnUpdateDismiss, btnUpdateDismiss);
+
+    // Botón ignorar/cerrar por defecto
+    newBtnUpdateDismiss.addEventListener('click', () => {
+        updaterNotification.classList.add('hidden');
+        updaterNotification.classList.remove('flex');
+    });
+
+    if (state === 'available') {
+        newBtnUpdateAction.classList.remove('hidden');
+        newBtnUpdateDismiss.classList.remove('hidden');
+        newBtnUpdateAction.innerText = 'Descargar';
+        newBtnUpdateAction.addEventListener('click', () => {
+            window.startUpdateDownload();
+            showUpdaterUI('Iniciando descarga...', 'downloading');
+        });
+    } else if (state === 'downloading') {
+        updaterProgressContainer.classList.remove('hidden');
+    } else if (state === 'ready') {
+        newBtnUpdateAction.classList.remove('hidden');
+        newBtnUpdateDismiss.classList.remove('hidden');
+        newBtnUpdateAction.innerText = 'Instalar y Reiniciar';
+        newBtnUpdateAction.addEventListener('click', () => {
+            window.installUpdate();
+        });
+    } else if (state === 'none') {
+        newBtnUpdateDismiss.classList.remove('hidden');
+        newBtnUpdateDismiss.innerText = 'Cerrar';
+    }
+};
+
 ipcRenderer.on('update-available', (event, data) => {
-    console.log('Update available', data);
+    showUpdaterUI('¡Hay una nueva versión de la aplicación disponible!', 'available');
 });
 
 ipcRenderer.on('update-downloading', (event, data) => {
-    console.log('Update downloading', data);
+    showUpdaterUI('Comenzando la descarga de la actualización...', 'downloading');
 });
 
 ipcRenderer.on('update-ready', (event, data) => {
-    console.log('Update ready', data);
+    showUpdaterUI('La actualización está lista para ser instalada.', 'ready');
 });
+
+ipcRenderer.on('message', (event, text) => {
+    console.log('Mensaje del sistema:', text);
+
+    // Detectar mensajes de progreso nativos del updater
+    if (text.includes('Downloaded') || text.includes('Download speed')) {
+        showUpdaterUI(text, 'downloading');
+
+        // Extraer el número de porcentaje usando Regex
+        const match = text.match(/Downloaded\s+([\d.]+)%/);
+        if (match && match[1]) {
+            const porcentaje = match[1];
+            const barra = document.getElementById('updater-progress-bar');
+            if (barra) barra.style.width = `${porcentaje}%`;
+        }
+    }
+});
+
+// ============================================================================
+// EVENTOS DE ACTUALIZACIÓN (Envío)
+// ============================================================================
+
+/**
+ * Solicita al proceso principal verificar si hay actualizaciones
+ */
+window.checkForUpdates = () => {
+    ipcRenderer.send('check-for-updates');
+};
+
+/**
+ * Solicita al proceso principal descargar la actualización disponible
+ */
+window.startUpdateDownload = () => {
+    ipcRenderer.send('start-update-download');
+};
+
+/**
+ * Solicita al proceso principal instalar la actualización descargada y reiniciar
+ */
+window.installUpdate = () => {
+    ipcRenderer.send('install-update');
+};
 
 // ============================================================================
 // EVENT LISTENERS

@@ -1,4 +1,5 @@
 const electron = require('electron');
+const log = require('electron-log');
 console.log('ELECTRON_RUN_AS_NODE:', process.env.ELECTRON_RUN_AS_NODE);
 const { app } = electron;
 

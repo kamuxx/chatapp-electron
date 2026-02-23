@@ -1,14 +1,14 @@
 const { BrowserWindow, Menu, app, ipcMain } = require('electron');
-const {contacts, chats} = require('./chats');
+const { contacts, chats } = require('./chats');
 const { autoUpdater, AppUpdater } = require('electron-updater');
 
 const path = require('path');
 const srcPath = path.join(__dirname);
 const pagesPath = path.join(__dirname, 'pages');
 const componentsPath = path.join(__dirname, 'components');
-
+let mainWindow;
 function createWindow() {
-    let mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1366,
         height: 768,
         webPreferences: {
@@ -25,8 +25,8 @@ function createWindow() {
     mainWindow.webContents.openDevTools(); // Disabled to avoid Autofill.setAddresses console error
 
     const menu = Menu.buildFromTemplate([
-    {
-        label: 'File',
+        {
+            label: 'File',
             submenu: [
                 {
                     label: 'Console',
@@ -42,9 +42,9 @@ function createWindow() {
                     }
                 },
             ]
-    },
-    {
-        label: 'Edit',
+        },
+        {
+            label: 'Edit',
             submenu: [
                 {
                     label: 'Undo',
@@ -52,34 +52,34 @@ function createWindow() {
                     role: 'undo'
                 }
             ]
-    }
+        }
     ]);
-    mainWindow.setMenu(menu);    
-    mainWindow.webContents.on('did-finish-load',() => {
+    mainWindow.setMenu(menu);
+    mainWindow.webContents.on('did-finish-load', () => {
         //mainWindow.webContents.send('chats',chats);
-        mainWindow.webContents.send('contacts',contacts);
+        mainWindow.webContents.send('contacts', contacts);
     })
-    
-    ipcMain.on('contact-selected',(event, arg)=>{        
-        const contact = chats.find(contact => contact.nick === arg);        
-        const {messages} = contact;        
-        mainWindow.webContents.send('user-messages',messages);
+
+    ipcMain.on('contact-selected', (event, arg) => {
+        const contact = chats.find(contact => contact.nick === arg);
+        const { messages } = contact;
+        mainWindow.webContents.send('user-messages', messages);
     });
 
-    ipcMain.on('check-for-updates',()=> {
-        mainWindow.webContents.send('update-available',{message:"Update available"});
+    ipcMain.on('check-for-updates', () => {
+        mainWindow.webContents.send('update-available', { message: "Update available" });
     })
 
-    ipcMain.on('start-update-download',()=> {
+    ipcMain.on('start-update-download', () => {
         // Iniciar descarga
         autoUpdater.downloadUpdate();
-        mainWindow.webContents.send('update-downloading',{message:"Update downloading"});
+        mainWindow.webContents.send('update-downloading', { message: "Update downloading" });
     });
 
-    ipcMain.on('install-update',()=> {
+    ipcMain.on('install-update', () => {
         // Instalar update
 
-        mainWindow.webContents.send('update-ready',{message:"Update ready"});
+        mainWindow.webContents.send('update-ready', { message: "Update ready" });
 
         autoUpdater.quitAndInstall();
     });
@@ -87,25 +87,38 @@ function createWindow() {
     return mainWindow;
 }
 
-function autoUpdaterApp(mainWindow){
+function autoUpdaterApp(mainWindow) {
     autoUpdater.autoDownload = false;
     autoUpdater.autoInstallOnAppQuit = false;
     autoUpdater.checkForUpdates();
 
-    autoUpdater.on('update-available',() => {
-        console.log('Update available');
-        mainWindow.webContents.send('update-available');
+    autoUpdater.on('checking-for-update', () => {
+        sendStatusToWindow('Checking for update...');
     })
+    autoUpdater.on('update-available', (info) => {
+        sendStatusToWindow('Update available.');
+    })
+    autoUpdater.on('update-not-available', (info) => {
+        sendStatusToWindow('Update not available.');
+    })
+    autoUpdater.on('error', (err) => {
+        sendStatusToWindow('Error in auto-updater. ' + err);
+    })
+    autoUpdater.on('download-progress', (progressObj) => {
+        let log_message = "Download speed: " + progressObj.bytesPerSecond;
+        log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+        log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+        sendStatusToWindow(log_message);
+    })
+    autoUpdater.on('update-downloaded', (info) => {
+        sendStatusToWindow('Update downloaded');
+    });
+}
 
 
-    autoUpdater.on('update-downloaded',() => {
-        console.log('Update downloaded');
-        mainWindow.webContents.send('update-ready');
-    })
-
-    autoUpdater.on('error',(error) => {
-        console.log('Error updating',error);
-    })
+function sendStatusToWindow(text) {
+    log.info(text);
+    mainWindow.webContents.send('message', text);
 }
 
 module.exports = { createWindow, autoUpdaterApp };
