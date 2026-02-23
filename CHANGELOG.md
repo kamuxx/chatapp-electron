@@ -14,6 +14,20 @@ Ver el archivo [`mejoras.md`](./mejoras.md) para el roadmap completo de mejoras 
 
 ---
 
+## [1.2.2] - 2026-02-23
+
+### 🔧 Configuración (Chore)
+- **Migración completa a Electron Builder**: Eliminados todos los scripts de `electron-forge` (`start`, `package`, `make`) del `package.json`. El toolchain de build ahora es exclusivamente `electron-builder`.
+- **Limpieza de dependencias de producción**: `tailwindcss` y `@tailwindcss/cli` movidos de `dependencies` a `devDependencies`. El CSS ya compilado (`output.css`) es el único artefacto necesario en el ejecutable final.
+- **Scripts simplificados**: Renombrado `pack` → `build` y `publish` → `release` para mayor claridad semántica del flujo de compilación/distribución.
+- **Eliminado `@electron-forge/cli`** de `devDependencies` para reducir el peso de `node_modules`.
+
+### 🗑️ Eliminaciones
+- Scripts: `start`, `package`, `make` (todos dependientes de Electron Forge).
+- Dependencias: `@electron-forge/cli` eliminado del árbol de desarrollo.
+
+---
+
 ## [1.2.0] - 2026-02-23
 
 ### ✨ Características (Features)
