@@ -52,6 +52,23 @@ function createWindow() {
                     role: 'undo'
                 }
             ]
+        },
+        {
+            label: 'Help',
+            submenu: [
+                {
+                    label: 'About',
+                    click: () => {
+                        mainWindow.webContents.send('about');
+                    }
+                },
+                {
+                    label: 'Check for updates',
+                    click: () => {
+                        mainWindow.webContents.send('check-for-updates');
+                    }
+                }
+            ]
         }
     ]);
     mainWindow.setMenu(menu);
