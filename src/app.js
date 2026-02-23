@@ -1,6 +1,7 @@
 const { BrowserWindow, Menu, app, ipcMain } = require('electron');
 const { contacts, chats } = require('./chats');
-const { autoUpdater, AppUpdater } = require('electron-updater');
+const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
 
 const path = require('path');
 const srcPath = path.join(__dirname);
@@ -84,7 +85,7 @@ function createWindow() {
     });
 
     ipcMain.on('check-for-updates', () => {
-        mainWindow.webContents.send('update-available', { message: "Update available" });
+        autoUpdater.checkForUpdates();
     })
 
     ipcMain.on('start-update-download', () => {
