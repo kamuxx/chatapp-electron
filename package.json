@@ -10,6 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
     "package": "electron-forge package",
+    "pack": "electron-builder --dir",
     "make": "electron-forge make"
   },
   "keywords": [
