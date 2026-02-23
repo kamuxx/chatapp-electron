@@ -3,7 +3,7 @@
   "version": "1.2.2",
   "author": "Kamuxx",
   "description": "ChatApp is one application in electron with React",
-  "main": "index.js",
+  "main": "index.js",ks
   "scripts": {
     "dev": "npm run build:css && nodemon --exec \"npx electron .\"",
     "build:css": "tailwindcss -i ./src/assets/input.css -o ./src/assets/output.css --minify",
