@@ -1,4 +1,4 @@
-const { BrowserWindow, Menu, app, ipcMain } = require('electron');
+const { BrowserWindow, Menu, app, ipcMain, dialog } = require('electron');
 const { contacts, chats } = require('./chats');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
@@ -60,7 +60,13 @@ function createWindow() {
                 {
                     label: 'About',
                     click: () => {
-                        mainWindow.webContents.send('about');
+                        dialog.showMessageBox(mainWindow, {
+                            type: 'info',             // ícono de información
+                            title: 'Acerca de ChatApp',
+                            message: `ChatApp v${app.getVersion()}`,
+                            detail: 'Desarrollado por Kamuxx\nElectron + TailwindCSS',
+                            buttons: ['Cerrar']
+                        });
                     }
                 },
                 {
