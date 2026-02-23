@@ -1,6 +1,6 @@
 {
   "name": "chat-app",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "author": "Kamuxx",
   "description": "ChatApp is one application in electron with React",
   "main": "index.js",
