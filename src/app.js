@@ -66,7 +66,7 @@ function createWindow() {
                 {
                     label: 'Check for updates',
                     click: () => {
-                        mainWindow.webContents.send('check-for-updates');
+                        autoUpdater.checkForUpdates();
                     }
                 }
             ]
@@ -115,6 +115,7 @@ function autoUpdaterApp(mainWindow) {
     })
     autoUpdater.on('update-available', (info) => {
         sendStatusToWindow('Update available.');
+        mainWindow.webContents.send('update-available', info);
     })
     autoUpdater.on('update-not-available', (info) => {
         sendStatusToWindow('Update not available.');
@@ -127,9 +128,11 @@ function autoUpdaterApp(mainWindow) {
         log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
         log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
         sendStatusToWindow(log_message);
+        mainWindow.webContents.send('update-downloading', progressObj);
     })
     autoUpdater.on('update-downloaded', (info) => {
         sendStatusToWindow('Update downloaded');
+        mainWindow.webContents.send('update-ready', info);
     });
 }
 
