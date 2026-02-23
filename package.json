@@ -21,13 +21,6 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@electron-forge/maker-deb": "^7.11.1",
-    "@electron-forge/maker-rpm": "^7.11.1",
-    "@electron-forge/maker-squirrel": "^7.3.0",
-    "@electron-forge/maker-zip": "^7.11.1",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.11.1",
-    "@electron-forge/plugin-fuses": "^7.11.1",
-    "@electron/fuses": "^1.8.0",
     "@tailwindcss/cli": "^4.1.18",
     "electron": "^40.0.0",
     "electron-builder": "^26.8.1",
@@ -37,7 +30,6 @@
   },
   "dependencies": {
     "electron-log": "^5.4.3",
-    "electron-squirrel-startup": "^1.0.1",
     "electron-updater": "^6.8.3"
   },
   "publish": [

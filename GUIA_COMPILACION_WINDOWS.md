@@ -1,91 +1,71 @@
-# 🛠️ Guía Definitiva de Compilación: Electron en Windows
+# 🛠️ Guía de Compilación: Electron en Windows
 
-Esta guía ha sido actualizada para resolver los problemas de compilación más agresivos que ocurren con versiones modernas como **Visual Studio 2026 (v18)**, **Node 22 LTS**, y los requisitos estrictos de los instaladores de Windows (Squirrel).
-
----
-
-## 🚨 Paso 1: Instalación de Herramientas (La Base)
-
-El 99% de los errores se deben a que faltan las herramientas de compilación de C++. Windows NO las trae por defecto.
-
-### 1. Visual Studio Build Tools
-1. Descarga e inicia el instalador de **Visual Studio Build Tools**.
-2. En la pestaña "Cargas de trabajo" (Workloads), **MARCA** la opción:
-   * ✅ **Desarrollo para el escritorio con C++** (Desktop development with C++).
-3. Haz clic en **Instalar**. (Esto descargará varios GB, ten paciencia).
-4. **Reinicio OBLIGATORIO:** Reinicia tu PC para que Windows registre las variables de entorno.
+Esta guía cubre el proceso completo para compilar e instalar **ChatApp** en Windows usando **Electron Builder** con instalador NSIS.
 
 ---
 
-## ⚡ Paso 2: Configuración Obligatoria del `package.json`
+## 🚨 Paso 1: Herramientas de Compilación Nativa (Requeridas)
 
-Antes de siquiera intentar compilar, tu archivo `package.json` **DEBE** cumplir estas reglas, o el empaquetador de Windows (`Squirrel.Windows`) fallará silenciosamente:
+El 99% de los errores se deben a que faltan las herramientas de C++. Windows **no** las incluye por defecto.
 
-1. **Requisitos de Squirrel:** Squirrel exige saber quién hizo la app y para qué sirve. Si faltan estos campos, el comando `npm run make` fallará diciendo `Authors is required. Description is required.`
-   Asegúrate de tener esto en tu `package.json`:
-   ```json
-   "author": "Tu Nombre o Empresa",
-   "description": "Una descripción de lo que hace la aplicación",
-   ```
-
-2. **(Opcional pero recomendado) Actualizar node-gyp:** Si tienes "Visual Studio 2026" (v18), el `node-gyp` viejo se confundirá. Se recomienda forzar a usar uno moderno añadiendo esto a la raíz de tu `package.json`:
-   ```json
-   "overrides": {
-     "node-gyp": "^12.2.0",
-     "@electron/node-gyp": "^12.2.0"
-   }
-   ```
+### Visual Studio Build Tools
+1. Descarga e instala **Visual Studio Build Tools** desde [visualstudio.microsoft.com](https://visualstudio.microsoft.com/downloads/).
+2. En la pestaña *Cargas de trabajo*, marca:
+   - ✅ **Desarrollo para el escritorio con C++**
+3. Haz clic en **Instalar** (descargará varios GB — ten paciencia).
+4. **Reinicia el PC** para que Windows registre las variables de entorno.
 
 ---
 
-## 🧹 Paso 3: Limpieza Radical y Preparación
+## ⚡ Paso 2: Instalación de Dependencias
 
-Abre tu terminal (PowerShell o Git Bash) en la carpeta de tu proyecto. Si has tenido errores antes, limpia los cachés viejos:
+```bash
+# Instalar con Bun (recomendado — es el gestor del proyecto)
+bun install
 
-```powershell
-# Borra las dependencias corruptas o viejas
-rm -rf node_modules
-rm -rf out
-del package-lock.json
-
-# Reinstala todo aplicando las reglas nuevas
+# O con npm si no tienes bun
 npm install
 ```
 
 ---
 
-## 🚀 Paso 4: Evitar el Error "gyp ERR! find VS" y Compilar
+## 🚀 Paso 3: Comandos de Compilación
 
-Si instalaste un Visual Studio muy moderno (Como el Preview 2026), `node-gyp` no sabrá leer la versión. **Debemos decirle manualmente la versión antes de compilar.**
-
-En tu terminal (PowerShell dentro de VS Code), ejecuta estos comandos en orden:
-
-```powershell
-# 1. Le decimos al compilador qué versión de Visual Studio buscar (Evita el "undefined")
-$env:GYP_MSVS_VERSION="2024"
-
-# 2. (Opcional) Compila el CSS o Tailwind si tu app lo requiere
-npm run build:css
-
-# 3. Genera el ejecutable (.exe / instalador)
-npm run make
+### Probar localmente (sin publicar)
+Genera la app desempaquetada en `release/win-unpacked/` para pruebas sin necesidad de instalar:
+```bash
+bun run build
 ```
 
-**Si todo sale bien:**
-Verás muchos logs verdes y la barra de progreso avanzará. Al final, en tu proyecto aparecerá una carpeta llamada `out`. Adentro encontrarás: `out/make/squirrel.windows/x64/` con tu precioso instalador **.exe**.
+### Publicar a GitHub Releases (auto-updater)
+Compila el instalador NSIS y lo sube directamente al repositorio de GitHub:
+```bash
+bun run release
+```
+> ⚠️ Requiere tener configurado `GH_TOKEN` en las variables de entorno con permisos de escritura al repo.
+
+**Resultado:** En `release/` encontrarás:
+- `chatapp-electron-Setup-X.Y.Z.exe` — Instalador NSIS para el usuario final.
+- `latest.yml` — Metadata que usa el auto-updater para detectar nuevas versiones.
 
 ---
 
-## 🐛 Solución Rápida a Errores Comunes
+## 🔢 Paso 4: Manejar el Error `gyp ERR! find VS`
 
-### Error: `Authors is required. Description is required.`
-* **Causa:** El instalador no sabe qué nombre de creador poner en Windows.
-* **Solución:** Ve a tu `package.json`, llena los campos `"author"` y `"description"` y vuelve a compilar (Visto en el Paso 2).
+Si tienes múltiples versiones de Visual Studio instaladas, `node-gyp` puede confundirse. Fuerza la versión antes de compilar:
 
-### Error: `Could not find any Visual Studio installation` o `"undefined" found at...`
-* **Causa:** `node-gyp` está desactualizado o está confundido por una versión de Visual Studio del futuro.
-* **Solución:** Asegúrate de ejecutar `$env:GYP_MSVS_VERSION="2024"` (o `"2022"`) en PowerShell justo antes de ejecutar `npm run make`.
+```powershell
+# En PowerShell — solo para la sesión actual
+$env:GYP_MSVS_VERSION="2022"
+bun run build
+```
 
-### Error: `EBUSY: resource busy or locked`
-* **Causa:** Un archivo está siendo usado por otro programa (Visual Studio, VS Code, tu propia App corriendo).
-* **Solución:** Cierra TODAS las instancias de tu App. Cierra ventanas adicionales y vuelve a intentar.
+---
+
+## 🐛 Errores Comunes
+
+| Error | Causa | Solución |
+|---|---|---|
+| `gyp ERR! find VS` | `node-gyp` no detecta Visual Studio | Ejecutar `$env:GYP_MSVS_VERSION="2022"` antes del build |
+| `EBUSY: resource busy` | Archivo bloqueado por otro proceso | Cerrar todas las instancias de la app y el VS Code |
+| `Could not find any VS installation` | VS Build Tools no instalado | Instalar la carga de trabajo *Desktop development with C++* |
